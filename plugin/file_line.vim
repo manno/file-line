@@ -6,16 +6,16 @@ let g:loaded_file_line = 1
 
 " list with all possible expressions :
 "     matches file(10) or file(line:col)
-"     Accept file:line:column: or file:line:column and file:line also
-let s:regexpressions = [ '\([^(]\{-1,}\)(\%(\(\d\+\)\%(:\(\d*\):\?\)\?\))', '\(.\{-1,}\):\%(\(\d\+\)\%(:\(\d*\):\?\)\?\)\?' ]
+"     Accept file:line or file:line:*
+let s:regexpressions = [ '\(.\{-1,}\):\%(\(\d\+\)\%(:\(.*\):\?\)\?\)\?' ]
 
-function! s:reopenAndGotoLine(file_name, line_num, col_num)
+function! s:reopenAndGotoLine(file_name, line_num, word)
 	if filereadable(a:file_name)
 		let l:bufn = bufnr("%")
 
 		exec "keepalt edit " . fnameescape(a:file_name)
 		exec ":" . a:line_num
-		exec "normal! " . a:col_num . '|'
+        "exec "/" . a:word
 		if foldlevel(a:line_num) > 0
 			exec "normal! zv"
 		endif
@@ -45,8 +45,8 @@ function! s:gotoline()
         if ! empty(l:names)
             let file_name = l:names[1]
             let line_num  = l:names[2] == ''? '0' : l:names[2]
-            let  col_num  = l:names[3] == ''? '0' : l:names[3]
-            call s:reopenAndGotoLine(file_name, line_num, col_num)
+            let  word     = l:names[3] == ''? '0' : l:names[3]
+            call s:reopenAndGotoLine(file_name, line_num, word)
             break
         endif
     endfor
