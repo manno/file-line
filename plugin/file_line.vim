@@ -52,11 +52,5 @@ function! s:gotoline()
     endfor
 endfunction
 
-function s:startup()
-    autocmd! BufNewFile * nested call s:gotoline()
-    autocmd! BufRead * nested call s:gotoline()
-    silent! bufdo call s:gotoline()
-    silent! bfirst
-endfunction
-
-autocmd VimEnter * call s:startup()
+autocmd! BufNewFile *:* nested call s:gotoline()
+autocmd! BufRead *:* nested call s:gotoline()
